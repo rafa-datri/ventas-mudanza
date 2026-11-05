@@ -45,14 +45,13 @@ const ITEMS = [
     specs: ['Pantalla color táctil 3,5", CAS (cálculo simbólico), batería recargable.', 'Versión G1 (hardware rev. C). Software 2.1.14730 (2023), la última versión.']
   },
   {
-    nombre: 'Rifle aire com',
-    precio: 350000,
-    estado: 'vendido',
-    fotos: ['mochila-primicia/1.jpg', 'mochila-primicia/2.jpg'],
-    fotoNota: 'Fotos de catálogo.',
+    nombre: 'Rifle de aire comprimido Crosman Optimus 5.5 mm',
+    precio: 400000,
+    estado: 'disponible',
+    fotos: ['rifle-aire-comprimido/1.jpeg'],
     detalle: ['Como nuevo.', 'Incluye mira telescópica 4x32 montada.', 'Solo para mayores de 18 años.'],
-    specs: ['Capacidad 32 L. 47 cm de alto x 30 cm de ancho.', 'Impermeable, compartimento acolchado para notebook.', 'Apertura tipo valija, bolsillos laterales y correas de compresión.']
-  },  
+    specs: ['Calibre 5.5 mm (.22). Quiebre a resorte (se arma bajando el cañón), un tiro.', 'Hasta ~290 m/s (950 fps) con balines livianos de aleación; menos con plomo.', 'Cañón estriado. Punto de mira de fibra óptica y alza regulable en altura y deriva.', 'Cola de disparador de dos etapas regulable. Seguro manual.', 'Culata de madera ambidiestra con cantonera de goma. Riel de 11 mm para mira.', 'Largo: 109 cm. Peso: ~2,9 kg.']
+  },
   {
     nombre: 'Cámara instantánea Fujifilm Instax Mini 12 – Mint Green',
     precio: 140000,
