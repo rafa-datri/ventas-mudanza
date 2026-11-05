@@ -88,6 +88,52 @@
   .chip[aria-pressed="true"] { background: var(--chip-on); color: var(--chip-on-ink); }
   .count { margin: 14px 0 0; font-size: .85rem; color: var(--muted); }
 
+  /* Deslizador de precio (dos manijas) */
+  .price-filter { margin-top: 12px; }
+  .price-head { display: flex; justify-content: space-between; align-items: baseline; font-size: .88rem; }
+  .price-head b { font-weight: 700; }
+  .range { position: relative; height: 32px; margin: 2px 0 0; }
+  .range .rail {
+    position: absolute; left: 12px; right: 12px; top: 50%;
+    height: 4px; transform: translateY(-50%);
+    background: var(--chip); border-radius: 2px;
+  }
+  .range .fill { position: absolute; top: 0; bottom: 0; background: var(--chip-on); border-radius: 2px; }
+  .range input {
+    position: absolute; inset: 0; width: 100%; height: 100%; margin: 0;
+    -webkit-appearance: none; appearance: none;
+    background: none; pointer-events: none;
+  }
+  .range input::-webkit-slider-runnable-track { background: none; height: 100%; }
+  .range input::-moz-range-track { background: none; }
+  .range input::-webkit-slider-thumb {
+    -webkit-appearance: none; pointer-events: auto;
+    width: 24px; height: 24px; border-radius: 50%; margin-top: 4px;
+    background: var(--chip-on); border: 3px solid var(--card);
+    box-shadow: 0 1px 4px rgba(0,0,0,.35); cursor: grab;
+  }
+  .range input::-moz-range-thumb {
+    pointer-events: auto;
+    width: 18px; height: 18px; border-radius: 50%;
+    background: var(--chip-on); border: 3px solid var(--card);
+    box-shadow: 0 1px 4px rgba(0,0,0,.35); cursor: grab;
+  }
+
+  /* Flechas de fotos */
+  .nav {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    width: 38px; height: 38px; border-radius: 50%; border: 0;
+    display: grid; place-items: center;
+    background: rgba(255,255,255,.88); color: #1f1c18;
+    box-shadow: 0 1px 6px rgba(0,0,0,.25);
+    cursor: pointer; z-index: 2;
+    transition: opacity .15s;
+  }
+  .nav svg { width: 18px; height: 18px; }
+  .nav.prev { left: 8px; }
+  .nav.next { right: 8px; }
+  .nav[disabled] { opacity: 0; pointer-events: none; }
+
   /* ---------- Grilla ---------- */
   .grid {
     display: grid; gap: 18px;
@@ -212,12 +258,13 @@
       <button class="chip" data-v="disponible" aria-pressed="false">Disponibles</button>
       <button class="chip" data-v="vendido" aria-pressed="false">Vendidos</button>
     </div>
-    <div class="row" id="f-precio" role="group" aria-label="Filtrar por precio">
-      <button class="chip" data-v="0-Infinity" aria-pressed="true">Cualquier precio</button>
-      <button class="chip" data-v="0-50000" aria-pressed="false">Hasta $50.000</button>
-      <button class="chip" data-v="50000-150000" aria-pressed="false">$50.000 – $150.000</button>
-      <button class="chip" data-v="150000-300000" aria-pressed="false">$150.000 – $300.000</button>
-      <button class="chip" data-v="300000-Infinity" aria-pressed="false">Más de $300.000</button>
+    <div class="price-filter">
+      <div class="price-head"><span>Precio</span><b id="p-label"></b></div>
+      <div class="range">
+        <div class="rail"><div class="fill" id="p-fill"></div></div>
+        <input type="range" id="p-min" step="5000" aria-label="Precio mínimo">
+        <input type="range" id="p-max" step="5000" aria-label="Precio máximo">
+      </div>
     </div>
   </div>
 </div>
@@ -260,6 +307,9 @@
         <div class="media">
           <div class="track">${imgs}</div>
           ${dots}
+          ${it.fotos.length > 1 ? `
+            <button class="nav prev" data-dir="-1" aria-label="Foto anterior" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+            <button class="nav next" data-dir="1" aria-label="Foto siguiente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>` : ''}
           ${it.fotoNota ? `<span class="photo-note">${esc(it.fotoNota)}</span>` : ''}
           ${sold ? '<div class="stamp" aria-label="Vendido">SOLD</div>' : ''}
         </div>
@@ -283,7 +333,7 @@
     const list = ITEMS
       .map((it, i) => ({ it, i }))
       .filter(({ it }) => (state.estado === 'todos' || it.estado === state.estado)
-                       && it.precio >= state.min && it.precio < state.max);
+                       && it.precio >= state.min && it.precio <= state.max);
     grid.innerHTML = list.length
       ? list.map(({ it, i }) => card(it, i)).join('')
       : '<p class="empty">No hay artículos con estos filtros.</p>';
@@ -291,11 +341,15 @@
     count.textContent = `${disp} disponibles de ${ITEMS.length}` +
       (list.length !== ITEMS.length ? ` · mostrando ${list.length}` : '');
     grid.querySelectorAll('.track').forEach(t => {
-      const dots = t.parentElement.querySelectorAll('.dots i');
+      const media = t.parentElement;
+      const dots = media.querySelectorAll('.dots i');
       if (!dots.length) return;
+      const prev = media.querySelector('.nav.prev'), next = media.querySelector('.nav.next');
       t.addEventListener('scroll', () => {
         const k = Math.round(t.scrollLeft / t.clientWidth);
         dots.forEach((d, j) => d.classList.toggle('on', j === k));
+        prev.disabled = k === 0;
+        next.disabled = k === dots.length - 1;
       }, { passive: true });
     });
   }
@@ -309,9 +363,38 @@
     });
   }
   bindChips('f-estado', v => { state.estado = v; });
-  bindChips('f-precio', v => { const [a, b] = v.split('-').map(Number); state.min = a; state.max = b; });
+
+  // Deslizador de precio: va de $0 al artículo más caro, de a $5.000.
+  const STEP = 5000;
+  const TOP = Math.ceil(Math.max(...ITEMS.map(x => x.precio)) / STEP) * STEP;
+  const pMin = document.getElementById('p-min'), pMax = document.getElementById('p-max');
+  const pFill = document.getElementById('p-fill'), pLabel = document.getElementById('p-label');
+  [pMin, pMax].forEach(r => { r.min = 0; r.max = TOP; });
+  pMin.value = 0; pMax.value = TOP;
+  state.max = TOP;
+
+  function onPrice(e) {
+    let a = +pMin.value, b = +pMax.value;
+    if (a > b) { if (e && e.target === pMin) { a = b; pMin.value = a; } else { b = a; pMax.value = b; } }
+    state.min = a; state.max = b;
+    pFill.style.left = (a / TOP * 100) + '%';
+    pFill.style.width = ((b - a) / TOP * 100) + '%';
+    pLabel.textContent = (a === 0 && b === TOP) ? 'Todos' : `${fmt(a)} – ${fmt(b)}`;
+    // Si las dos manijas quedan juntas, la de arriba es la que se puede mover hacia el centro.
+    pMin.style.zIndex = a > TOP / 2 ? 2 : 1;
+    if (e) render();
+  }
+  pMin.addEventListener('input', onPrice);
+  pMax.addEventListener('input', onPrice);
+  onPrice();
 
   grid.addEventListener('click', e => {
+    const nav = e.target.closest('.nav');
+    if (nav) {
+      const t = nav.parentElement.querySelector('.track');
+      t.scrollBy({ left: +nav.dataset.dir * t.clientWidth, behavior: 'smooth' });
+      return;
+    }
     const b = e.target.closest('.wpp');
     if (b) {
       const it = ITEMS[b.dataset.i];

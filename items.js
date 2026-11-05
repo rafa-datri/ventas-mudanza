@@ -45,6 +45,15 @@ const ITEMS = [
     specs: ['Pantalla color táctil 3,5", CAS (cálculo simbólico), batería recargable.', 'Versión G1 (hardware rev. C). Software 2.1.14730 (2023), la última versión.']
   },
   {
+    nombre: 'Rifle aire com',
+    precio: 350000,
+    estado: 'vendido',
+    fotos: ['mochila-primicia/1.jpg', 'mochila-primicia/2.jpg'],
+    fotoNota: 'Fotos de catálogo.',
+    detalle: ['Como nuevo.', 'Incluye mira telescópica 4x32 montada.', 'Solo para mayores de 18 años.'],
+    specs: ['Capacidad 32 L. 47 cm de alto x 30 cm de ancho.', 'Impermeable, compartimento acolchado para notebook.', 'Apertura tipo valija, bolsillos laterales y correas de compresión.']
+  },  
+  {
     nombre: 'Cámara instantánea Fujifilm Instax Mini 12 – Mint Green',
     precio: 140000,
     estado: 'vendido',
@@ -101,5 +110,5 @@ const ITEMS = [
     fotoNota: 'Fotos de catálogo.',
     detalle: ['Excelente estado.'],
     specs: ['Capacidad 32 L. 47 cm de alto x 30 cm de ancho.', 'Impermeable, compartimento acolchado para notebook.', 'Apertura tipo valija, bolsillos laterales y correas de compresión.']
-  }
+  },
 ];
