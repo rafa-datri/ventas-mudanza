@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Venta por mudanza</title>
+<meta name="description" content="Cosas de casa en venta por mudanza: notebook, auriculares, calculadora HP Prime y más.">
+<meta property="og:title" content="Venta por mudanza">
+<meta property="og:description" content="Notebook, auriculares, calculadora HP Prime y más. Consultas por WhatsApp.">
+<meta property="og:image" content="https://rafa-datri.github.io/ventas-mudanza/fotos/og.jpg">
+<meta property="og:url" content="https://rafa-datri.github.io/ventas-mudanza/">
+<meta property="og:type" content="website">
+<meta name="theme-color" content="#f4efe6">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f4efe6;
+    --card: #fffdf9;
+    --ink: #1f1c18;
+    --muted: #6f675d;
+    --line: #e3dbcf;
+    --photo: #ece6dc;
+    --chip: #ebe4d8;
+    --chip-on: #1f1c18;
+    --chip-on-ink: #fffdf9;
+    --wpp: #1c8c4a;
+    --wpp-ink: #ffffff;
+    --sold: #d1232a;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #171512;
+      --card: #211e1a;
+      --ink: #f2ede4;
+      --muted: #a69d90;
+      --line: #35302a;
+      --photo: #2a2621;
+      --chip: #2c2823;
+      --chip-on: #f2ede4;
+      --chip-on-ink: #171512;
+      --wpp: #22a259;
+      --sold: #ff4b52;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 16px/1.45 "DM Sans", system-ui, -apple-system, sans-serif;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 16px; }
+
+  /* ---------- Encabezado ---------- */
+  header { padding: 32px 0 8px; }
+  h1 {
+    font-family: Fraunces, Georgia, serif;
+    font-weight: 700;
+    font-size: clamp(2.1rem, 8vw, 3.2rem);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin: 0 0 10px;
+  }
+  .lead { margin: 0; color: var(--muted); max-width: 34em; }
+  .updated { margin: 10px 0 0; font-size: .82rem; color: var(--muted); }
+
+  /* ---------- Filtros ---------- */
+  .filters {
+    position: sticky; top: 0; z-index: 5;
+    background: var(--bg);
+    padding: 12px 0 10px;
+    border-bottom: 1px solid var(--line);
+  }
+  .row { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
+  .row::-webkit-scrollbar { display: none; }
+  .row + .row { margin-top: 8px; }
+  .chip {
+    flex: none;
+    border: 0; border-radius: 999px;
+    padding: 8px 14px;
+    background: var(--chip); color: var(--ink);
+    font: 500 .88rem/1 "DM Sans", system-ui, sans-serif;
+    cursor: pointer;
+  }
+  .chip[aria-pressed="true"] { background: var(--chip-on); color: var(--chip-on-ink); }
+  .count { margin: 14px 0 0; font-size: .85rem; color: var(--muted); }
+
+  /* ---------- Grilla ---------- */
+  .grid {
+    display: grid; gap: 18px;
+    grid-template-columns: 1fr;
+    padding: 14px 0 48px;
+  }
+  @media (min-width: 640px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 980px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    overflow: hidden;
+    display: flex; flex-direction: column;
+  }
+
+  /* Fotos deslizables */
+  .media { position: relative; background: var(--photo); }
+  .track {
+    display: flex; overflow-x: auto;
+    scroll-snap-type: x mandatory; scrollbar-width: none;
+    aspect-ratio: 3 / 4;
+  }
+  .track::-webkit-scrollbar { display: none; }
+  .track img {
+    flex: none; width: 100%; height: 100%;
+    object-fit: contain; scroll-snap-align: center;
+    cursor: zoom-in; display: block;
+  }
+  .dots {
+    position: absolute; left: 0; right: 0; bottom: 10px;
+    display: flex; justify-content: center; gap: 6px; pointer-events: none;
+  }
+  .dots i {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: rgba(255,255,255,.55); box-shadow: 0 0 0 1px rgba(0,0,0,.15);
+  }
+  .dots i.on { background: #fff; }
+  .photo-note {
+    position: absolute; top: 10px; left: 10px;
+    font-size: .72rem; padding: 3px 8px; border-radius: 999px;
+    background: rgba(0,0,0,.55); color: #fff;
+  }
+
+  /* Sello SOLD */
+  .card.sold .track img { filter: grayscale(1); opacity: .55; }
+  .stamp {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%) rotate(-18deg);
+    font: 700 clamp(2.6rem, 14vw, 3.6rem)/1 Fraunces, Georgia, serif;
+    letter-spacing: .12em;
+    color: var(--sold);
+    padding: 6px 18px 4px 26px;
+    border: 5px solid var(--sold);
+    border-radius: 10px;
+    outline: 2px solid var(--sold); outline-offset: 4px;
+    background: color-mix(in srgb, var(--card) 70%, transparent);
+    pointer-events: none;
+  }
+
+  /* Texto */
+  .body { padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+  .card h2 { font-size: 1.08rem; line-height: 1.25; margin: 0; font-weight: 700; }
+  .price {
+    font-family: Fraunces, Georgia, serif;
+    font-weight: 700; font-size: 1.6rem; line-height: 1;
+  }
+  .price small { font-family: "DM Sans", system-ui, sans-serif; font-size: .85rem; font-weight: 500; color: var(--muted); margin-left: 4px; }
+  .card.sold .price { color: var(--muted); text-decoration: line-through; text-decoration-thickness: 2px; }
+  .card.sold h2 { color: var(--muted); }
+  ul { margin: 0; padding-left: 1.1em; }
+  li { margin: 2px 0; }
+  .detail { font-size: .93rem; }
+  details { font-size: .9rem; color: var(--muted); }
+  summary { cursor: pointer; font-weight: 500; color: var(--ink); padding: 2px 0; }
+  details ul { margin-top: 6px; }
+
+  .wpp {
+    margin-top: auto;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    width: 100%; border: 0; border-radius: 12px;
+    padding: 13px 16px;
+    background: var(--wpp); color: var(--wpp-ink);
+    font: 700 1rem/1 "DM Sans", system-ui, sans-serif;
+    cursor: pointer;
+  }
+  .wpp svg { width: 20px; height: 20px; fill: currentColor; }
+  .sold-note { margin-top: auto; font-size: .88rem; color: var(--muted); }
+
+  .empty { text-align: center; color: var(--muted); padding: 40px 0; grid-column: 1 / -1; }
+
+  /* Foto en pantalla completa */
+  .lightbox {
+    position: fixed; inset: 0; z-index: 20;
+    background: rgba(0,0,0,.92);
+    display: none; align-items: center; justify-content: center;
+  }
+  .lightbox.open { display: flex; }
+  .lightbox img { max-width: 100%; max-height: 100%; object-fit: contain; }
+  .lightbox button {
+    position: absolute; top: max(12px, env(safe-area-inset-top)); right: 12px;
+    width: 44px; height: 44px; border-radius: 50%; border: 0;
+    background: rgba(255,255,255,.15); color: #fff; font-size: 1.4rem; cursor: pointer;
+  }
+
+  footer { padding: 0 0 40px; font-size: .8rem; color: var(--muted); text-align: center; }
+</style>
+</head>
+<body>
+
+<header class="wrap">
+  <h1>Venta por<br>mudanza</h1>
+  <p class="lead">Cosas de casa, usadas y en el estado que se describe. Si algo te interesa, escribime por WhatsApp desde el botón de cada artículo.</p>
+  <p class="updated" id="updated"></p>
+</header>
+
+<div class="filters">
+  <div class="wrap">
+    <div class="row" id="f-estado" role="group" aria-label="Filtrar por estado">
+      <button class="chip" data-v="todos" aria-pressed="true">Todos</button>
+      <button class="chip" data-v="disponible" aria-pressed="false">Disponibles</button>
+      <button class="chip" data-v="vendido" aria-pressed="false">Vendidos</button>
+    </div>
+    <div class="row" id="f-precio" role="group" aria-label="Filtrar por precio">
+      <button class="chip" data-v="0-Infinity" aria-pressed="true">Cualquier precio</button>
+      <button class="chip" data-v="0-50000" aria-pressed="false">Hasta $50.000</button>
+      <button class="chip" data-v="50000-150000" aria-pressed="false">$50.000 – $150.000</button>
+      <button class="chip" data-v="150000-300000" aria-pressed="false">$150.000 – $300.000</button>
+      <button class="chip" data-v="300000-Infinity" aria-pressed="false">Más de $300.000</button>
+    </div>
+  </div>
+</div>
+
+<main class="wrap">
+  <p class="count" id="count"></p>
+  <div class="grid" id="grid"></div>
+</main>
+
+<footer class="wrap">Precios en pesos argentinos.</footer>
+
+<div class="lightbox" id="lightbox" role="dialog" aria-label="Foto ampliada">
+  <img alt="">
+  <button aria-label="Cerrar">✕</button>
+</div>
+
+<script src="items.js"></script>
+<script>
+  // Número de WhatsApp guardado en partes: solo se arma cuando alguien toca el botón.
+  const W = ['54', '9', '11', '6500', '4038'];
+
+  const fmt = n => new Intl.NumberFormat('es-AR', { style: 'currency', currency: 'ARS', maximumFractionDigits: 0 }).format(n);
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+  const [y, m, d] = ACTUALIZADO.split('-').map(Number);
+  document.getElementById('updated').textContent =
+    'Actualizado el ' + new Date(y, m - 1, d).toLocaleDateString('es-AR', { day: 'numeric', month: 'long', year: 'numeric' }) + '.';
+
+  const WPP_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.04 2a9.9 9.9 0 0 0-8.5 14.98L2 22l5.17-1.5A9.93 9.93 0 1 0 12.04 2Zm0 18.1a8.2 8.2 0 0 1-4.18-1.15l-.3-.18-3.07.89.9-2.98-.2-.31a8.18 8.18 0 1 1 6.85 3.73Zm4.5-6.12c-.25-.12-1.47-.72-1.7-.8-.23-.09-.4-.13-.56.12-.17.25-.64.8-.79.97-.14.16-.29.18-.54.06a6.7 6.7 0 0 1-1.98-1.22 7.42 7.42 0 0 1-1.37-1.7c-.14-.25 0-.38.11-.5.11-.11.25-.29.37-.43.13-.15.17-.25.25-.42.08-.16.04-.3-.02-.43-.06-.12-.56-1.35-.77-1.85-.2-.48-.4-.42-.56-.42h-.48a.92.92 0 0 0-.66.31 2.78 2.78 0 0 0-.87 2.07 4.83 4.83 0 0 0 1.01 2.56 11.06 11.06 0 0 0 4.23 3.74c.59.25 1.05.4 1.41.52.59.19 1.13.16 1.56.1.47-.07 1.47-.6 1.67-1.18.21-.58.21-1.08.15-1.18-.06-.1-.23-.17-.48-.29Z"/></svg>';
+
+  function card(it, i) {
+    const sold = it.estado === 'vendido';
+    const imgs = it.fotos.map((f, k) =>
+      `<img src="fotos/${f}" alt="${esc(it.nombre)} – foto ${k + 1}" loading="${i < 2 ? 'eager' : 'lazy'}" decoding="async">`).join('');
+    const dots = it.fotos.length > 1
+      ? `<div class="dots">${it.fotos.map((_, k) => `<i class="${k ? '' : 'on'}"></i>`).join('')}</div>` : '';
+    const li = arr => (arr || []).map(s => `<li>${esc(s)}</li>`).join('');
+    return `
+      <article class="card${sold ? ' sold' : ''}">
+        <div class="media">
+          <div class="track">${imgs}</div>
+          ${dots}
+          ${it.fotoNota ? `<span class="photo-note">${esc(it.fotoNota)}</span>` : ''}
+          ${sold ? '<div class="stamp" aria-label="Vendido">SOLD</div>' : ''}
+        </div>
+        <div class="body">
+          <h2>${esc(it.nombre)}</h2>
+          <div class="price">${fmt(it.precio)}${it.precioNota ? `<small>${esc(it.precioNota)}</small>` : ''}</div>
+          ${it.detalle ? `<ul class="detail">${li(it.detalle)}</ul>` : ''}
+          ${it.specs ? `<details><summary>Especificaciones</summary><ul>${li(it.specs)}</ul></details>` : ''}
+          ${sold
+            ? '<p class="sold-note">Ya se vendió.</p>'
+            : `<button class="wpp" data-i="${i}">${WPP_ICON}Consultar por WhatsApp</button>`}
+        </div>
+      </article>`;
+  }
+
+  const grid = document.getElementById('grid');
+  const count = document.getElementById('count');
+  const state = { estado: 'todos', min: 0, max: Infinity };
+
+  function render() {
+    const list = ITEMS
+      .map((it, i) => ({ it, i }))
+      .filter(({ it }) => (state.estado === 'todos' || it.estado === state.estado)
+                       && it.precio >= state.min && it.precio < state.max);
+    grid.innerHTML = list.length
+      ? list.map(({ it, i }) => card(it, i)).join('')
+      : '<p class="empty">No hay artículos con estos filtros.</p>';
+    const disp = ITEMS.filter(x => x.estado !== 'vendido').length;
+    count.textContent = `${disp} disponibles de ${ITEMS.length}` +
+      (list.length !== ITEMS.length ? ` · mostrando ${list.length}` : '');
+    grid.querySelectorAll('.track').forEach(t => {
+      const dots = t.parentElement.querySelectorAll('.dots i');
+      if (!dots.length) return;
+      t.addEventListener('scroll', () => {
+        const k = Math.round(t.scrollLeft / t.clientWidth);
+        dots.forEach((d, j) => d.classList.toggle('on', j === k));
+      }, { passive: true });
+    });
+  }
+
+  function bindChips(id, apply) {
+    const row = document.getElementById(id);
+    row.addEventListener('click', e => {
+      const b = e.target.closest('.chip'); if (!b) return;
+      row.querySelectorAll('.chip').forEach(c => c.setAttribute('aria-pressed', c === b));
+      apply(b.dataset.v); render();
+    });
+  }
+  bindChips('f-estado', v => { state.estado = v; });
+  bindChips('f-precio', v => { const [a, b] = v.split('-').map(Number); state.min = a; state.max = b; });
+
+  grid.addEventListener('click', e => {
+    const b = e.target.closest('.wpp');
+    if (b) {
+      const it = ITEMS[b.dataset.i];
+      const msg = `Hola Rafa! Vi la página de la mudanza y me interesa: ${it.nombre} (${fmt(it.precio)}).`;
+      window.location.href = `https://wa.me/${W.join('')}?text=${encodeURIComponent(msg)}`;
+      return;
+    }
+    const img = e.target.closest('.track img');
+    if (img) { lbImg.src = img.src; lb.classList.add('open'); }
+  });
+
+  const lb = document.getElementById('lightbox');
+  const lbImg = lb.querySelector('img');
+  lb.addEventListener('click', () => lb.classList.remove('open'));
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') lb.classList.remove('open'); });
+
+  render();
+</script>
+</body>
+</html>
