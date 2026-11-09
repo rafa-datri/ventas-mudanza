@@ -9,7 +9,7 @@
 //  Después: git add . && git commit -m "..." && git push
 // =====================================================================
 
-const ACTUALIZADO = '2026-11-05';
+const ACTUALIZADO = '2026-11-09';
 
 const ITEMS = [
   {
@@ -23,7 +23,7 @@ const ITEMS = [
   {
     nombre: 'Notebook Dell Latitude 5400 (14")',
     precio: 420000,
-    estado: 'disponible',
+    estado: 'vendido',
     fotos: ['dell-latitude-5400/1.jpg', 'dell-latitude-5400/2.jpg'],
     detalle: ['Intel Core i5-8365U, 16 GB RAM, SSD NVMe 256 GB.', 'Buen estado general, tapa con marcas leves de uso.', 'Batería al 61% (41,6 de 68 Wh). Incluye cargador original.'],
     specs: ['Línea corporativa Latitude, 14".', 'Teclado en español con ñ, lector de huellas, webcam con tapa de privacidad, trackpoint.', 'Windows 10 (licencia OEM).', 'Tiene etiqueta de inventario "LT-08" (se puede retirar).']
@@ -88,7 +88,7 @@ const ITEMS = [
   {
     nombre: 'Florero de cerámica "burbujas" – rosa nude',
     precio: 10000,
-    estado: 'disponible',
+    estado: 'vendido',
     fotos: ['florero/1.jpg'],
     detalle: ['Muy buen estado.'],
     specs: ['Forma de discos apilados, terminación mate texturada.', 'Altura: 20 cm.']
@@ -109,5 +109,13 @@ const ITEMS = [
     fotoNota: 'Fotos de catálogo.',
     detalle: ['Excelente estado.'],
     specs: ['Capacidad 32 L. 47 cm de alto x 30 cm de ancho.', 'Impermeable, compartimento acolchado para notebook.', 'Apertura tipo valija, bolsillos laterales y correas de compresión.']
+  },
+  {
+    nombre: 'Bicicleta Merida Matts rodado 26 – Cuadro L',
+    precio: 300000,
+    estado: 'disponible',
+    fotos: ['bicicleta-merida/1.jpg', 'bicicleta-merida/2.jpg', 'bicicleta-merida/3.jpg', 'bicicleta-merida/4.jpg'],
+    detalle: ['Usada. Tiene marcas de uso y algo de óxido en la cadena y la horquilla (se ve en las fotos).', 'Cuadro talle L.'],
+    specs: ['Cuadro de aluminio Merida Matts, color plata.', 'Rodado 26, llantas doble pared con cubiertas de taco. Ruedas con cierre rápido.', 'Transmisión Shimano con triple plato adelante. Palancas de cambio y freno integradas.', 'Frenos V-brake.', 'Horquilla con suspensión. Manubrio Merida Comp.']
   },
 ];
